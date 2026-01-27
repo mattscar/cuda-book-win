@@ -1,0 +1,34 @@
+.version 9.0
+.target sm_75
+.address_size 64
+
+	// .globl	add_arrays
+
+.visible .entry add_arrays(
+	.param .u64 arrayA,
+	.param .u64 arrayB,
+	.param .u64 arrayC
+)
+{
+	.reg .f32 	%f<4>;
+	.reg .b32 	%r<2>;
+	.reg .b64 	%rd<11>;
+
+	ld.param.u64 	%rd1, [arrayA];
+	ld.param.u64 	%rd2, [arrayB];
+	ld.param.u64 	%rd3, [arrayC];
+	cvta.to.global.u64 	%rd4, %rd3;
+	cvta.to.global.u64 	%rd5, %rd2;
+	cvta.to.global.u64 	%rd6, %rd1;
+	mov.u32 	%r1, %tid.x;
+	mul.wide.s32 	%rd7, %r1, 4;
+	add.s64 	%rd8, %rd6, %rd7;
+	ld.global.f32 	%f1, [%rd8];
+	add.s64 	%rd9, %rd5, %rd7;
+	ld.global.f32 	%f2, [%rd9];
+	add.f32 	%f3, %f1, %f2;
+	add.s64 	%rd10, %rd4, %rd7;
+	st.global.f32 	[%rd10], %f3;
+	ret;
+}
+

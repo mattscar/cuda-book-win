@@ -1,0 +1,26 @@
+// Set the version and target
+.version 7.0
+.target sm_70
+.address_size 64
+
+// Kernel declaration
+.visible .entry simple (
+    .param .u64 arg
+)
+{
+    // Register declarations
+    .reg .b64 %reg_addr;
+    .reg .f32 %reg_value;
+
+    // Load address into register
+    ld.param.u64 %reg_addr, [arg];
+
+    // Move constant value to a register
+    mov.f32 %reg_value, 37.0;
+
+    // Store value to global memory
+    st.global.f32 [%reg_addr], %reg_value;
+
+    // Return from the kernel
+    ret;
+}
